@@ -2,12 +2,25 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useForm } from 'react-hook-form';
+import { agregarAlumnoAPI } from '../helpers/queries';
+import { useNavigate } from 'react-router';
 
 const FormularioAlumnos = () => {
     const { register, handleSubmit, reset, formState: { errors }, clearErrors } = useForm();
 
-    const postValidaciones = (data) => {
+    const navigate = useNavigate();
+
+    const postValidaciones = async (data) => {
         console.log(data);
+
+        const respuesta = await agregarAlumnoAPI(data);
+        if (respuesta.status === 201) {
+            alert("El alumno fue agregado exitosamente!");
+            navigate("/");
+        } else {
+            alert("Ocurrio un error al agregar el alumno")
+        }
+
         reset();
     }
 
@@ -58,13 +71,10 @@ const FormularioAlumnos = () => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>DNI</Form.Label>
-                    <Form.Control type="text" placeholder="ej: 45784457"
+                    <Form.Control type="number" placeholder="ej: 45784457"
                         {...register("dni", {
                             required: "El DNI es un dato obligatorio",
-                            minLength: {
-                                value: 8,
-                                message: "El DNI debe contener 8 caracteres"
-                            }
+                            valueAsNumber: true,
                         })}
                         onChange={() => clearErrors("dni")}
                     />
@@ -74,13 +84,10 @@ const FormularioAlumnos = () => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Telefono</Form.Label>
-                    <Form.Control type="text" placeholder="ej: 3863457841"
+                    <Form.Control type="number" placeholder="ej: 3863457841"
                         {...register("telefono", {
                             required: "El telefono es un dato obligatorio",
-                            minLength: {
-                                value: 10,
-                                message: "El telefono debe contener minimo 10 caracteres"
-                            }
+                            valueAsNumber: true,
                         })}
                         onChange={() => clearErrors("telefono")}
                     />

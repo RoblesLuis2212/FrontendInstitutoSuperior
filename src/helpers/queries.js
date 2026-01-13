@@ -21,3 +21,19 @@ export const eliminarAlumnoAPI = async (id) => {
     return null;
   }
 };
+
+export const agregarAlumnoAPI = async (alumno) => {
+  try {
+    const respuesta = await fetch(alumnosBackend, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(alumno),
+    });
+    return respuesta;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
